@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
-import { fetchClipto } from '@/lib/clipto';
+import { ddownr } from '@/lib/downr';
 
 export async function POST(request) {
   try {
-    const { url } = await request.json();
+    const { url, quality } = await request.json();
 
     if (!url) {
       return NextResponse.json(
@@ -12,13 +12,13 @@ export async function POST(request) {
       );
     }
 
-    const result = await fetchClipto(url);
-    
+    const result = await ddownr(url, quality || '720');
     return NextResponse.json(result);
+
   } catch (error) {
-    console.error('Scrape error:', error);
+    console.error('Download error:', error);
     return NextResponse.json(
-      { error: error.message || 'Gagal mengambil data dari YouTube' },
+      { error: error.message || 'Gagal mendownload video' },
       { status: 500 }
     );
   }
